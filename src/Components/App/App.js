@@ -9,7 +9,43 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {searchResults: []};
+    this.state = {
+      searchResults: [],
+      playlistName: '',
+      playlistTracks: []
+    };
+
+    this.addTrack = this.addTrack.bind(this);
+    this.removeTrack = this.removeTrack.bind(this);
+  }
+
+  // TODO: may need to look over this logic
+  addTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack =>
+      savedTrack.id === track.id)) {
+      return;
+    } else {
+      this.setState(state => {
+        const playlistTracks = state.playlistTracks.concat(track);
+        return {
+          playlistTracks
+        }
+      })
+    }
+  }
+
+  // TODO: may need to look over this logic
+  removeTrack(track) {
+    let updatedTracks = [];
+    this.state.playlistTracks.forEach(playlistTrack => {
+      if (playlistTrack.id !== track.id) {
+        updatedTracks.push(playlistTrack);
+      }
+    });
+
+    this.setState({
+      playlistTracks: updatedTracks
+    });
   }
 
   render() {
@@ -19,8 +55,13 @@ class App extends React.Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults}/>
-            <Playlist />
+            <SearchResults
+              onAdd={this.addTrack}
+              searchResults={this.state.searchResults}/>
+            <Playlist
+              onRemove={this.removeTrack}
+              playlistName={this.state.playlistName}
+              playlistTracks={this.state.playlistTracks} />
           </div>
         </div>
       </div>
