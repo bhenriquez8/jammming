@@ -5,6 +5,8 @@ import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 
+import Spotify from '../../util/Spotify';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +20,8 @@ class App extends React.Component {
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlaylist = this.savePlaylist.bind(this);
+    this.search = this.search.bind(this);
   }
 
   // TODO: may need to look over this logic
@@ -55,12 +59,23 @@ class App extends React.Component {
     });
   }
 
+  savePlaylist() {
+    const trackUri = this.state.playlistTracks.concat();
+    console.log(trackUri);
+  }
+
+  search(term) {
+    this.setState({
+      searchResults: Spotify.search(term)
+    });
+  }
+
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar />
+          <SearchBar onSearch={this.search}/>
           <div className="App-playlist">
             <SearchResults
               onAdd={this.addTrack}
